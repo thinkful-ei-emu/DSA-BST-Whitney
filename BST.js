@@ -114,7 +114,7 @@ class BinarySearchTree {
     if (!this.left) {
       return this;
     }
-    return this.left._findMind();
+    return this.left._findMin();
   }
 }
 

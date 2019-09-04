@@ -12,14 +12,14 @@ const BST = require('./BST');
 // 3, 1, 4, 6, 9, 2, 5, 7 into your tree, compare
 // results with the result from 1st exercise
 
-const numberBST = new BST(3);
-numberBST.insert(1);
-numberBST.insert(4);
-numberBST.insert(6);
-numberBST.insert(9);
-numberBST.insert(2);
-numberBST.insert(5);
-numberBST.insert(7);
+const numberBST = new BST(3,3);
+numberBST.insert(1,1);
+numberBST.insert(4,4);
+numberBST.insert(6,6);
+numberBST.insert(9,9);
+numberBST.insert(2,2);
+numberBST.insert(5,5);
+numberBST.insert(7,7);
 
 // Using https://www.cs.usfca.edu/~galles/visualization/BST.html
 // for visualization instead of trying to write a 
@@ -79,21 +79,25 @@ exampleTree.insert(6,6);
 
 //Height = n+1 where n = level (starts at 0)
 
-function findHeight(bst) {
+function findHeight(bst, counter = 0) {
   if (bst === null) {
-    return 0;
+    return counter;
   }
   else {
-    let leftHeight = findHeight(bst.left);
-    let rightHeight = findHeight(bst.right);
+    debugger;
+    counter++;
+
+    let leftHeight = findHeight(bst.left, counter);
+    let rightHeight = findHeight(bst.right, counter);
 
     if (leftHeight > rightHeight) {
-      return (leftHeight + 1);
+      counter = leftHeight;
     }
     else {
-      return (rightHeight + 1);
+      counter = rightHeight;
     }
   }
+  return counter;
 }
 
 console.log(findHeight(numberBST));
@@ -104,16 +108,101 @@ console.log(findHeight(numberBST));
 // binary tree is a binary search tree, assuming the
 // tree does not contain duplicates.
 
+// Attributes of a BST = no more than 2 children, no duplicate
+// numbers (per instructions), all values on left < root/current node, all 
+// values on right > root/current node
+
+function isItABST(bst) {
+  
+  if (!bst.key) {
+    return false;
+  }
+  
+  if (bst.left) {
+    if (bst.value > bst.left.value) {
+      isItABST(bst.left);
+    } 
+    else {
+      return false;
+    }
+  }
+  if (bst.right) {
+    if (bst.value < bst.right.value) {
+      isItABST(bst.right);
+    }
+    else {
+      return false;
+    }
+  }
+  return true;
+}
+
+//console.log(isItABST(numberBST));
+//console.log(isItABST([5, 7, 9]));
 
 
 // ===== 7. 3rd Largest Node =====
 // Write an algorithm to find the 3rd largest node in a 
 // binary search tree
 
+function thirdLargest(bst, largest = null, counter = 0) {//------> come back to
+  // let newCounter = counter;
+  
+  // // Find the largest - all the way to the right
+  
+  // if (bst !== null) {
+  //   largest = thirdLargest(bst.right, largest = bst, newCounter);
+    
+  // }
+  
+  // // Remove largest with our BST remove function, increment counter
+  // while (newCounter < 2 ) {
+  //   largest.remove(largest.key);
+  //   newCounter++;
+  //   thirdLargest(largest.parent, null, newCounter);  // ---> gets to correct node, but getting out of recursion messes it up
+  // }
+  // return largest;
+}
+
+//console.log(thirdLargest(numberBST));
+
 // ===== 8. Balanced BST =====
 // Write an algorithm that checks if a BST is balanced (i.e.,
 // a tree where no 2 leaves differ in distance from the root
 // by more than 1)
+
+const balancedBST = new BST(5,5);
+numberBST.insert(1,1);
+numberBST.insert(10,10);
+
+
+function isItBalanced(bst, counter = 0) {
+  if (bst === null) {
+    return true;
+  }
+  else {
+    counter++;
+
+    //CHANGE NEEDED: find side heights of subtrees? Then height +1?
+    let leftHeight = findHeight(bst.left, counter);
+    let rightHeight = findHeight(bst.right, counter);
+
+    console.log(leftHeight, rightHeight);
+    if (Math.abs(leftHeight - rightHeight) <= 1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}
+
+console.log(isItBalanced(numberBST));
+// Expected output: false
+//console.log(isItBalanced(balancedBST));
+// Expected output: true
+
+
 
 // ===== 9. Are they the same BSTs? =====
 // You are given two arrays which represent two sequences
